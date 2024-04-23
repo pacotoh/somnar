@@ -6,10 +6,12 @@ somnAR
 Analysis and Forescasting of Health-Related Time Series Data using ARIMA, Holt Winters and LSTM
 </h3>
 
-## What's somnAR?
-The goal of this project is to analyze and forecast health-related time series data using classical time series models such as ARIMA and Holt Winters, as well as deep learning techniques such as Long Short-Term Memory (LSTM) neural networks. The project will involve working with a personal dataset of health-related time series data, including sleep patterns, physical activity levels, and other health metrics.
+## 😴 What's somnAR? 
+The goal of this project is to analyze and forecast health-related time series data using classical time series models such as **ARIMA** and **Holt Winters**, as well as deep learning techniques such as **Long Short-Term Memory** (LSTM) neural networks. The project will involve working with a personal dataset of health-related time series data, including sleep patterns, physical activity levels, and other health metrics.
 
 &nbsp;
+
+The name **somnar** is a wordplay combining **somnia** (Latin for "dreams") and **ar** (short for "auto-regressive"). Moreover, **somnar** is the present tense of the Swedish verb **somna**, which means "to fall asleep". 😃
 
 ## Objectives
 
