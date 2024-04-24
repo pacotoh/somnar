@@ -39,10 +39,12 @@ The name **somnar** is a wordplay combining **somnia** (Latin for "dreams") and 
 
 ## PostgreSQL Docker Database config
 
+Run the command docker-compose in the main directory of the application. You need to have Docker and Docker Compose installed previously.
+
 ```bash
-# In the main folder:
 docker-compose up -d
 ```
+
 &nbsp;
 
 The Docker configuration will create a container for the database and execute the automatically file creation tables **init.sql**, located in the data directory.
