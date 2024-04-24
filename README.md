@@ -36,3 +36,20 @@ The name **somnar** is a wordplay combining **somnia** (Latin for "dreams") and 
 | ARIMA         |        |
 | LSTM          |        |
 | UI            |        |
+
+## PostgreSQL Docker Database config
+
+```bash
+# In the main folder:
+docker-compose up -d
+```
+&nbsp;
+
+The Docker configuration will create a container for the database and execute the automatically file creation tables **init.sql**, located in the data directory.
+The service will listen on port **5432**.
+
+It is necessary to input the data into the data directory, as the CSV files will be directly copied into the PostgreSQL tables.
+
+&nbsp;
+
+![](img/db.png)
