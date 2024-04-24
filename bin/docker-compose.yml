@@ -1,0 +1,25 @@
+version: '3.9'
+# TODO: Need to create volumes with data/connection
+services:
+  db:
+    container_name: postgres
+    image: postgres
+    restart: always
+    shm_size: 128mb
+    # or set shared memory limit when deploy via swarm stack
+    #volumes:
+    #  - type: tmpfs
+    #    target: /dev/shm
+    #    tmpfs:
+    #      size: 134217728 # 128*2^20 bytes = 128Mb
+    environment:
+      POSTGRES_PASSWORD: 1234
+      POSTGRES_USER: admin
+      POSTGRES_HOST_AUTH_METHOD: trust
+
+  # TODO: Change this configuration
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - 8080:8080
