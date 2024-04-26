@@ -60,7 +60,17 @@ def gx_activity(context: gx.DataContext) -> None:
 
 
 def gx_activity_minute(context: gx.DataContext) -> None:
-    pass
+    val_am = context.sources.pandas_default.read_csv('../../data/activity_minute.csv')
+    [val_am.expect_column_values_to_not_be_null(col) for col in ['date',
+                                                                 'time',
+                                                                 'steps']]
+
+    val_am.expect_column_values_to_match_strftime_format(column='date', strftime_format='%Y-%m-%d')
+    val_am.expect_column_values_to_match_strftime_format(column='time', strftime_format='%H:%M')
+    val_am.expect_column_values_to_be_between(column='steps', min_value=0, max_value=300, mostly=0.95)
+
+    val_am.save_expectation_suite(discard_failed_expectations=False)
+    create_checkpoint(context, val_am, 'activity_minute')
 
 
 def gx_activity_stage(context: gx.DataContext) -> None:
@@ -79,3 +89,4 @@ if __name__ == '__main__':
     csv_context = gx.get_context()
     gx_sleep(csv_context)
     gx_activity(csv_context)
+    gx_activity_minute(csv_context)
