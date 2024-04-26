@@ -41,7 +41,22 @@ def gx_sleep(context: gx.DataContext) -> None:
 
 
 def gx_activity(context: gx.DataContext) -> None:
-    pass
+    val_act = context.sources.pandas_default.read_csv('../../data/activity.csv')
+    [val_act.expect_column_values_to_not_be_null(col) for col in ['date',
+                                                                  'steps',
+                                                                  'distance',
+                                                                  'runDistance',
+                                                                  'calories']]
+
+    val_act.expect_column_values_to_match_strftime_format(column='date', strftime_format='%Y-%m-%d')
+    val_act.expect_column_values_to_be_between(column='steps', min_value=0, max_value=20000, mostly=0.95)
+    val_act.expect_column_values_to_be_between(column='distance', min_value=0, max_value=15000, mostly=0.95)
+    val_act.expect_column_values_to_be_between(column='runDistance', min_value=0, max_value=12000)
+    val_act.expect_column_values_to_be_between(column='calories', min_value=0, max_value=1500, mostly=0.95)
+
+    val_act.save_expectation_suite(discard_failed_expectations=False)
+
+    create_checkpoint(context, val_act, 'activity')
 
 
 def gx_activity_minute(context: gx.DataContext) -> None:
@@ -63,3 +78,4 @@ def gx_sport(context: gx.DataContext) -> None:
 if __name__ == '__main__':
     csv_context = gx.get_context()
     gx_sleep(csv_context)
+    gx_activity(csv_context)
