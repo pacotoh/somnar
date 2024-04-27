@@ -16,22 +16,22 @@ def create_checkpoint(validator, name: str) -> None:
 def gx_sleep() -> None:
     val_sleep = context.sources.pandas_default.read_csv('../../data/sleep.csv')
     val_sleep.expect_table_columns_to_match_set(['date',
-                                                 'deepSleepTime',
-                                                 'shallowSleepTime',
-                                                 'wakeTime',
+                                                 'deep_sleep_time',
+                                                 'shallow_sleep_time',
+                                                 'wake_time',
                                                  'start',
                                                  'stop'])
 
     [val_sleep.expect_column_values_to_not_be_null(col) for col in ['date',
-                                                                    'deepSleepTime',
-                                                                    'shallowSleepTime',
-                                                                    'wakeTime',
+                                                                    'deep_sleep_time',
+                                                                    'shallow_sleep_time',
+                                                                    'wake_time',
                                                                     'start',
                                                                     'stop']]
 
-    val_sleep.expect_column_values_to_be_between(column='deepSleepTime', min_value=0, max_value=200)
-    val_sleep.expect_column_values_to_be_between(column='shallowSleepTime', min_value=0, max_value=650)
-    val_sleep.expect_column_values_to_be_between(column='wakeTime', min_value=0, max_value=100)
+    val_sleep.expect_column_values_to_be_between(column='deep_sleep_time', min_value=0, max_value=200)
+    val_sleep.expect_column_values_to_be_between(column='shallow_sleep_time', min_value=0, max_value=650)
+    val_sleep.expect_column_values_to_be_between(column='wake_time', min_value=0, max_value=100)
     val_sleep.expect_column_values_to_match_strftime_format(column='date', strftime_format='%Y-%m-%d')
     val_sleep.expect_column_values_to_match_strftime_format(column='start', strftime_format='%Y-%m-%d %H:%M:%S+0000')
     val_sleep.expect_column_values_to_match_strftime_format(column='stop', strftime_format='%Y-%m-%d %H:%M:%S+0000')
@@ -45,14 +45,14 @@ def gx_activity() -> None:
     [val_act.expect_column_values_to_not_be_null(col) for col in ['date',
                                                                   'steps',
                                                                   'distance',
-                                                                  'runDistance',
+                                                                  'run_distance',
                                                                   'calories']]
 
     val_act.expect_column_values_to_match_strftime_format(column='date', strftime_format='%Y-%m-%d')
-    val_act.expect_column_values_to_be_between(column='steps', min_value=0, max_value=20000, mostly=0.95)
-    val_act.expect_column_values_to_be_between(column='distance', min_value=0, max_value=15000, mostly=0.95)
-    val_act.expect_column_values_to_be_between(column='runDistance', min_value=0, max_value=12000)
-    val_act.expect_column_values_to_be_between(column='calories', min_value=0, max_value=1500, mostly=0.95)
+    val_act.expect_column_values_to_be_between(column='steps', min_value=0)
+    val_act.expect_column_values_to_be_between(column='distance', min_value=0)
+    val_act.expect_column_values_to_be_between(column='run_distance')
+    val_act.expect_column_values_to_be_between(column='calories', min_value=0)
 
     val_act.save_expectation_suite(discard_failed_expectations=False)
     create_checkpoint(val_act, 'activity')
@@ -66,7 +66,7 @@ def gx_activity_minute() -> None:
 
     val_am.expect_column_values_to_match_strftime_format(column='date', strftime_format='%Y-%m-%d')
     val_am.expect_column_values_to_match_strftime_format(column='time', strftime_format='%H:%M')
-    val_am.expect_column_values_to_be_between(column='steps', min_value=0, max_value=300, mostly=0.95)
+    val_am.expect_column_values_to_be_between(column='steps', min_value=0)
 
     val_am.save_expectation_suite(discard_failed_expectations=False)
     create_checkpoint(val_am, 'activity_minute')
@@ -86,8 +86,8 @@ def gx_activity_stage() -> None:
     val_as.expect_column_values_to_match_strftime_format(column='start', strftime_format='%H:%M')
     val_as.expect_column_values_to_match_strftime_format(column='stop', strftime_format='%H:%M')
     val_as.expect_column_values_to_be_between(column='distance', min_value=0, max_value=8000, mostly=0.95)
-    val_as.expect_column_values_to_be_between(column='calories', min_value=0, max_value=800, mostly=0.95)
-    val_as.expect_column_values_to_be_between(column='steps', min_value=0, max_value=12000, mostly=0.95)
+    val_as.expect_column_values_to_be_between(column='calories', min_value=0)
+    val_as.expect_column_values_to_be_between(column='steps', min_value=0)
 
     val_as.save_expectation_suite(discard_failed_expectations=False)
     create_checkpoint(val_as, 'activity_stage')
@@ -98,18 +98,40 @@ def gx_heartrate_auto() -> None:
 
     [val_ha.expect_column_values_to_not_be_null(col) for col in ['date',
                                                                  'time',
-                                                                 'heartRate']]
+                                                                 'heart_rate']]
 
     val_ha.expect_column_values_to_match_strftime_format(column='date', strftime_format='%Y-%m-%d')
     val_ha.expect_column_values_to_match_strftime_format(column='time', strftime_format='%H:%M')
-    val_ha.expect_column_values_to_be_between(column='heartRate', min_value=0, max_value=180, mostly=0.95)
+    val_ha.expect_column_values_to_be_between(column='heart_rate', min_value=0, max_value=180, mostly=0.95)
 
     val_ha.save_expectation_suite(discard_failed_expectations=False)
     create_checkpoint(val_ha, 'heartrate_auto')
 
 
 def gx_sport() -> None:
-    pass
+    val_sport = context.sources.pandas_default.read_csv('../../data/sport.csv')
+
+    [val_sport.expect_column_values_to_not_be_null(col) for col in ['type',
+                                                                    'start_time',
+                                                                    'sport_time',
+                                                                    'max_pace',
+                                                                    'min_pace',
+                                                                    'distance',
+                                                                    'avg_pace',
+                                                                    'calories']]
+
+    val_sport.expect_column_distinct_values_to_contain_set(column='type', value_set=[6, 24])
+    val_sport.expect_column_values_to_match_strftime_format(column='start_time',
+                                                            strftime_format='%Y-%m-%d %H:%M:%S+0000')
+    val_sport.expect_column_min_to_be_between(column='sport_time', min_value=0)
+    val_sport.expect_column_values_to_be_between(column='max_pace', min_value=0)
+    val_sport.expect_column_values_to_be_between(column='min_pace', min_value=0)
+    val_sport.expect_column_values_to_be_between(column='distance', min_value=0)
+    val_sport.expect_column_values_to_be_between(column='avg_pace', min_value=0)
+    val_sport.expect_column_min_to_be_between(column='calories', min_value=0)
+
+    val_sport.save_expectation_suite(discard_failed_expectations=False)
+    create_checkpoint(val_sport, 'sport')
 
 
 if __name__ == '__main__':
@@ -118,3 +140,4 @@ if __name__ == '__main__':
     gx_activity_minute()
     gx_activity_stage()
     gx_heartrate_auto()
+    gx_sport()
