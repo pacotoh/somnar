@@ -1,8 +1,18 @@
 #!/bin/bash
 
-source="../data/$1"
-target=${source#*_}
 dest="../data/"
+
+folder_name=$(find ../data -mindepth 1 -maxdepth 1 -type d -printf '%f\n' | sort | head -n 1)
+
+if [ -z "$folder_name" ]; then
+    echo "ERROR: Data folder not found. Please enter a health data folder inside the 'data' directory."
+    exit 1
+fi
+
+source="$dest$folder_name"
+target=${source#*_}
+
+echo "Creating data from $folder_name."
 
 find "$source" -type f -name '*.csv' -exec mv {} "$dest" \;
 
@@ -20,4 +30,4 @@ cp '../db/init.sql' '../data/'
 
 python '../src/cleaning/data_cleaning.py'
 
-echo "Data Initialization Process has completed."
+echo "Data Initialization Process completed."
