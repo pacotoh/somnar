@@ -1,19 +1,19 @@
 import great_expectations as gx
+from great_expectations.checkpoint.types.checkpoint_result import CheckpointResult
 
 context: gx.DataContext = gx.get_context()
 
 
-def create_checkpoint(validator, name: str) -> None:
+def create_checkpoint(validator, name: str):
     checkpoint = context.add_or_update_checkpoint(
         name=name,
         validator=validator,
     )
 
-    checkpoint_result = checkpoint.run()
-    context.view_validation_result(checkpoint_result)
+    return checkpoint.run()
 
 
-def gx_sleep() -> None:
+def gx_sleep() -> CheckpointResult:
     val_sleep = context.sources.pandas_default.read_csv('../../data/sleep.csv')
     val_sleep.expect_table_columns_to_match_set(['date',
                                                  'deep_sleep_time',
@@ -37,10 +37,10 @@ def gx_sleep() -> None:
     val_sleep.expect_column_values_to_match_strftime_format(column='stop', strftime_format='%Y-%m-%d %H:%M:%S+0000')
 
     val_sleep.save_expectation_suite(discard_failed_expectations=False)
-    create_checkpoint(val_sleep, 'sleep')
+    return create_checkpoint(val_sleep, 'sleep')
 
 
-def gx_activity() -> None:
+def gx_activity() -> CheckpointResult:
     val_act = context.sources.pandas_default.read_csv('../../data/activity.csv')
     [val_act.expect_column_values_to_not_be_null(col) for col in ['date',
                                                                   'steps',
@@ -51,14 +51,14 @@ def gx_activity() -> None:
     val_act.expect_column_values_to_match_strftime_format(column='date', strftime_format='%Y-%m-%d')
     val_act.expect_column_values_to_be_between(column='steps', min_value=0)
     val_act.expect_column_values_to_be_between(column='distance', min_value=0)
-    val_act.expect_column_values_to_be_between(column='run_distance')
+    val_act.expect_column_values_to_be_between(column='run_distance', min_value=0)
     val_act.expect_column_values_to_be_between(column='calories', min_value=0)
 
     val_act.save_expectation_suite(discard_failed_expectations=False)
-    create_checkpoint(val_act, 'activity')
+    return create_checkpoint(val_act, 'activity')
 
 
-def gx_activity_minute() -> None:
+def gx_activity_minute() -> CheckpointResult:
     val_am = context.sources.pandas_default.read_csv('../../data/activity_minute.csv')
     [val_am.expect_column_values_to_not_be_null(col) for col in ['date',
                                                                  'time',
@@ -69,10 +69,10 @@ def gx_activity_minute() -> None:
     val_am.expect_column_values_to_be_between(column='steps', min_value=0)
 
     val_am.save_expectation_suite(discard_failed_expectations=False)
-    create_checkpoint(val_am, 'activity_minute')
+    return create_checkpoint(val_am, 'activity_minute')
 
 
-def gx_activity_stage() -> None:
+def gx_activity_stage() -> CheckpointResult:
     val_as = context.sources.pandas_default.read_csv('../../data/activity_stage.csv')
 
     [val_as.expect_column_values_to_not_be_null(col) for col in ['date',
@@ -90,10 +90,10 @@ def gx_activity_stage() -> None:
     val_as.expect_column_values_to_be_between(column='steps', min_value=0)
 
     val_as.save_expectation_suite(discard_failed_expectations=False)
-    create_checkpoint(val_as, 'activity_stage')
+    return create_checkpoint(val_as, 'activity_stage')
 
 
-def gx_heartrate_auto() -> None:
+def gx_heartrate_auto() -> CheckpointResult:
     val_ha = context.sources.pandas_default.read_csv('../../data/heartrate_auto.csv')
 
     [val_ha.expect_column_values_to_not_be_null(col) for col in ['date',
@@ -105,10 +105,10 @@ def gx_heartrate_auto() -> None:
     val_ha.expect_column_values_to_be_between(column='heart_rate', min_value=0, max_value=180, mostly=0.95)
 
     val_ha.save_expectation_suite(discard_failed_expectations=False)
-    create_checkpoint(val_ha, 'heartrate_auto')
+    return create_checkpoint(val_ha, 'heartrate_auto')
 
 
-def gx_sport() -> None:
+def gx_sport() -> CheckpointResult:
     val_sport = context.sources.pandas_default.read_csv('../../data/sport.csv')
 
     [val_sport.expect_column_values_to_not_be_null(col) for col in ['type',
@@ -131,7 +131,7 @@ def gx_sport() -> None:
     val_sport.expect_column_min_to_be_between(column='calories', min_value=0)
 
     val_sport.save_expectation_suite(discard_failed_expectations=False)
-    create_checkpoint(val_sport, 'sport')
+    return create_checkpoint(val_sport, 'sport')
 
 
 if __name__ == '__main__':
@@ -140,4 +140,6 @@ if __name__ == '__main__':
     gx_activity_minute()
     gx_activity_stage()
     gx_heartrate_auto()
-    gx_sport()
+    checkpoint_result = gx_sport()
+
+    context.view_validation_result(checkpoint_result)
