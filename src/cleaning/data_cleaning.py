@@ -1,8 +1,8 @@
 import pandas as pd
 import re
 
-SLEEP_PATH = '../../data/sleep.csv'
-SPORT_PATH = '../../data/sport.csv'
+SLEEP_PATH = '../data/sleep.csv'
+SPORT_PATH = '../data/sport.csv'
 
 
 def clean_sleep_naps() -> None:
