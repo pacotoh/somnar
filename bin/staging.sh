@@ -18,6 +18,6 @@ rm -rf "$source"
 find "../data" -type f ! -name "*activity.csv" ! -name "*activity_minute.csv" ! -name "*activity_stage.csv" ! -name "*heartrate_auto.csv" ! -name "*sleep.csv" ! -name "*init.sql" ! -name "*sport.csv" -delete
 cp '../db/init.sql' '../data/'
 
-python '../src/cleaning/data_cleaning.py' '../data/sleep.csv'
+python '../src/cleaning/data_cleaning.py'
 
 echo "Data Initialization Process has completed."

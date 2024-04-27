@@ -1,4 +1,4 @@
-﻿type,startTime,sportTime(s),maxPace(/meter),minPace(/meter),distance(m),avgPace(/meter),calories(kcal)
+type,startTime,sport_time,max_pace,min_pace,distance(m),avg_pace,calories
 6,2024-04-24 19:00:14+0000,1269,0.0,0.64434886,1745.0,0.727,163.0
 6,2024-04-24 11:43:29+0000,1115,6.5154243,0.30787426,1790.0,0.622,152.0
 6,2024-04-23 18:59:39+0000,1263,0.0,0.42787176,1837.0,0.687,164.0
