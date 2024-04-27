@@ -21,9 +21,11 @@ def drop_sleep_unused_fields() -> None:
 def modify_sport_header() -> None:
     sport_df = pd.read_csv(SPORT_PATH)
     sport_df.rename(columns={
+        'startTime': 'start_time',
         'sportTime(s)': 'sport_time',
         'maxPace(/meter)': 'max_pace',
         'minPace(/meter)': 'min_pace',
+        'distance(m)': 'distance',
         'avgPace(/meter)': 'avg_pace',
         'calories(kcal)': 'calories'
     }, inplace=True)
