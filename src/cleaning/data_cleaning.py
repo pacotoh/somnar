@@ -4,6 +4,8 @@ import re
 SLEEP_PATH = '../data/sleep.csv'
 SPORT_PATH = '../data/sport.csv'
 HR_PATH = '../data/heartrate_auto.csv'
+HR_DAILY_PATH = '../data/heartrate_daily.csv'
+HR_DT_PATH = '../data/heartrate_datetime.csv'
 ACTIVITY_PATH = '../data/activity.csv'
 
 
@@ -67,13 +69,13 @@ def modify_activity_header() -> None:
 def generate_heartrate_by_day() -> None:
     hr_df = pd.read_csv(HR_PATH)
     mean_by_date: pd.DataFrame = hr_df.groupby('date')['heart_rate'].mean()
-    mean_by_date.to_csv('../../data/heartrate_daily.csv')
+    mean_by_date.to_csv(HR_DAILY_PATH)
 
 
 def generate_heartrate_in_datetime() -> None:
     hr_df = pd.read_csv(HR_PATH)
     hr_df['datetime'] = pd.to_datetime(hr_df['date']) + pd.to_timedelta(hr_df['time'] + ':00')
-    hr_df[['datetime', 'heart_rate']].to_csv('../../data/heartrate_datetime.csv')
+    hr_df[['datetime', 'heart_rate']].to_csv(HR_DT_PATH, index=False)
 
 
 def clean_csv_data() -> None:
