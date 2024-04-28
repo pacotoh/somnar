@@ -30,12 +30,13 @@ The name **somnar** is a wordplay combining **somnia** (Latin for "dreams") and 
 
 | Tool          | Status |
 |---------------|:------:|
-| Database      |   🚧   |
+| Database      |   ✅    |
+| UI            |   🚧   |
 | EDA           |        |
 | Visualization |        |
 | ARIMA         |        |
 | LSTM          |        |
-| UI            |        |
+
 
 ## PostgreSQL Docker Database config
 
@@ -55,3 +56,23 @@ It is necessary to input the data into the data directory, as the CSV files will
 &nbsp;
 
 ![](img/db.png)
+
+## GUI
+
+First version of UI using Taipy to visualize data.
+This is a sample of multiple time-series representation where interaction with the series can be done using Plotly.
+In this case, deep sleep, shallow sleep, and awake time parameters are being visualized. 
+
+![img.png](img/img.png)
+
+This is a preliminary version of the interface.
+
+&nbsp;
+
+The next example shows another representation of time-series data. In this case, it displays graphs for steps taken, distance covered, and calories consumed.
+
+![img_4.png](img/img_4.png)
+
+![img_2.png](img/img_2.png)
+
+![img_5.png](img/img_5.png)
