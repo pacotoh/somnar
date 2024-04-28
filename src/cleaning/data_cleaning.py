@@ -64,14 +64,32 @@ def modify_activity_header() -> None:
     act_df.to_csv(ACTIVITY_PATH, index=False)
 
 
+def generate_heartrate_by_day() -> None:
+    hr_df = pd.read_csv(HR_PATH)
+    mean_by_date: pd.DataFrame = hr_df.groupby('date')['heart_rate'].mean()
+    mean_by_date.to_csv('../../data/heartrate_daily.csv')
+
+
+def generate_heartrate_in_datetime() -> None:
+    hr_df = pd.read_csv(HR_PATH)
+    hr_df['datetime'] = pd.to_datetime(hr_df['date']) + pd.to_timedelta(hr_df['time'] + ':00')
+    hr_df[['datetime', 'heart_rate']].to_csv('../../data/heartrate_datetime.csv')
+
+
 def clean_csv_data() -> None:
+    # Sleep cleaning
     clean_sleep_naps()
     drop_sleep_unused_fields()
 
+    # Headers cleaning
     modify_sleep_header()
     modify_sport_header()
     modify_activity_header()
     modify_heartrate_header()
+
+    # HR csv generation
+    generate_heartrate_by_day()
+    generate_heartrate_in_datetime()
 
 
 if __name__ == '__main__':
