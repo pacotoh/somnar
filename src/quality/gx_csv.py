@@ -108,6 +108,32 @@ def gx_heartrate_auto() -> CheckpointResult:
     return create_checkpoint(val_ha, 'heartrate_auto')
 
 
+def gx_heartrate_daily() -> CheckpointResult:
+    val_ha = context.sources.pandas_default.read_csv('../../data/heartrate_daily.csv')
+
+    [val_ha.expect_column_values_to_not_be_null(col) for col in ['date',
+                                                                 'heart_rate']]
+
+    val_ha.expect_column_values_to_match_strftime_format(column='date', strftime_format='%Y-%m-%d')
+    val_ha.expect_column_values_to_be_between(column='heart_rate', min_value=0, max_value=180, mostly=0.95)
+
+    val_ha.save_expectation_suite(discard_failed_expectations=False)
+    return create_checkpoint(val_ha, 'heartrate_daily')
+
+
+def gx_heartrate_datetime() -> CheckpointResult:
+    val_ha = context.sources.pandas_default.read_csv('../../data/heartrate_datetime.csv')
+
+    [val_ha.expect_column_values_to_not_be_null(col) for col in ['datetime',
+                                                                 'heart_rate']]
+
+    val_ha.expect_column_values_to_match_strftime_format(column='datetime', strftime_format='%Y-%m-%d %H:%M:%S')
+    val_ha.expect_column_values_to_be_between(column='heart_rate', min_value=0, max_value=180, mostly=0.95)
+
+    val_ha.save_expectation_suite(discard_failed_expectations=False)
+    return create_checkpoint(val_ha, 'heartrate_datetime')
+
+
 def gx_sport() -> CheckpointResult:
     val_sport = context.sources.pandas_default.read_csv('../../data/sport.csv')
 
@@ -140,6 +166,8 @@ if __name__ == '__main__':
     gx_activity_minute()
     gx_activity_stage()
     gx_heartrate_auto()
+    gx_heartrate_daily()
+    gx_heartrate_datetime()
     checkpoint_result = gx_sport()
 
     context.view_validation_result(checkpoint_result)
