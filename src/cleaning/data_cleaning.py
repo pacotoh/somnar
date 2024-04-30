@@ -1,5 +1,6 @@
 import pandas as pd
 import re
+import numpy as np
 
 SLEEP_PATH = '../data/sleep.csv'
 SPORT_PATH = '../data/sport.csv'
@@ -76,6 +77,14 @@ def generate_heartrate_in_datetime() -> None:
     hr_df = pd.read_csv(HR_PATH)
     hr_df['datetime'] = pd.to_datetime(hr_df['date']) + pd.to_timedelta(hr_df['time'] + ':00')
     hr_df[['datetime', 'heart_rate']].to_csv(HR_DT_PATH, index=False)
+
+
+def clean_zero_values(df: pd.DataFrame, window: int = 7) -> pd.DataFrame:
+    rollmean = df.rolling(window=window).mean()
+    df_nan = df.replace(0, np.nan)
+    df_nan.fillna(rollmean, inplace=True)
+
+    return df_nan
 
 
 def clean_csv_data() -> None:
