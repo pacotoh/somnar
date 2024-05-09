@@ -17,7 +17,7 @@ def toggle_table():
     pass
 
 
-page = """
+main_page = """
 # somnAR: Time Series Health Monitor
 
 ## 🛌 Sleep
@@ -39,4 +39,4 @@ if __name__ == '__main__':
     sleep_df = get_data(SLEEP_PATH)
     activity_df = get_data(ACTIVITY_PATH)
 
-    Gui(page).run(debug=True, watermark='', title='somnAR')
+    Gui(main_page).run(debug=True, watermark='', title='somnAR')

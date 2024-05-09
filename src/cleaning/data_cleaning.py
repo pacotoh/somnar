@@ -79,12 +79,13 @@ def generate_heartrate_in_datetime() -> None:
     hr_df[['datetime', 'heart_rate']].to_csv(HR_DT_PATH, index=False)
 
 
-def clean_zero_values(df: pd.DataFrame, window: int = 7) -> pd.DataFrame:
-    rollmean = df.rolling(window=window).mean()
-    df_nan = df.replace(0, np.nan)
-    df_nan.fillna(rollmean, inplace=True)
+def clean_zero_values(df: pd.DataFrame, cols: list, window: int = 7) -> pd.DataFrame:
+    for col in cols:
+        rollmean = df[col].rolling(window=window).mean()
+        df[col] = df[col].replace(0, np.nan)
+        df[col] = df[col].fillna(rollmean)
 
-    return df_nan
+    return df
 
 
 def clean_csv_data() -> None:
@@ -101,6 +102,11 @@ def clean_csv_data() -> None:
     # HR csv generation
     generate_heartrate_by_day()
     generate_heartrate_in_datetime()
+
+    # Zero values cleaning
+    df_sleep = pd.read_csv(SLEEP_PATH)
+    (clean_zero_values(df_sleep, ['deep_sleep_time', 'shallow_sleep_time'])
+     .to_csv(SLEEP_PATH, index=False))
 
 
 if __name__ == '__main__':
